@@ -5,8 +5,8 @@
     Features: Auto Farm Brainrot, Auto Move Plant, Auto Gear, Event Support, and more
 ]]--
 
--- Load WindUI
-local WindUI = loadfile("d:\\aScriptHub\\Plant VS Braintot\\WindUI-main\\src\\Init.lua")()
+-- Load WindUI from GitHub
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Moonshall/Mons-Hub/main/WindUI-main/src/Init.lua"))()
 
 local Window = WindUI:CreateWindow({
     Title = "MonsHub | Plants vs Brainrots",
