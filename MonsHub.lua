@@ -456,12 +456,12 @@ function Library:CreateWindow(config)
     Version.Font = Enum.Font.Gotham
     Version.Parent = TopBar
     
-    -- Minimize Button (Modern Square Style)
+    -- Minimize Button (Transparent, Icon Only)
     local MinimizeBtn = Instance.new("TextButton")
     MinimizeBtn.Name = "MinimizeBtn"
-    MinimizeBtn.Size = UDim2.new(0, 45, 0, 45)
-    MinimizeBtn.Position = UDim2.new(1, -97, 0, 2.5)
-    MinimizeBtn.BackgroundColor3 = Color3.fromRGB(50, 120, 200)
+    MinimizeBtn.Size = UDim2.new(0, 40, 0, 40)
+    MinimizeBtn.Position = UDim2.new(1, -90, 0, 5)
+    MinimizeBtn.BackgroundTransparency = 1
     MinimizeBtn.BorderSizePixel = 0
     MinimizeBtn.Text = ""
     MinimizeBtn.AutoButtonColor = false
@@ -472,23 +472,18 @@ function Library:CreateWindow(config)
     MinimizeIcon.Name = "MinimizeIcon"
     MinimizeIcon.Size = UDim2.new(1, 0, 1, 0)
     MinimizeIcon.BackgroundTransparency = 1
-    MinimizeIcon.Text = "—"
+    MinimizeIcon.Text = "+"
     MinimizeIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
-    MinimizeIcon.TextSize = 18
+    MinimizeIcon.TextSize = 24
     MinimizeIcon.Font = Enum.Font.GothamBold
     MinimizeIcon.Parent = MinimizeBtn
     
-    -- Minimize Corner
-    local MinimizeCorner = Instance.new("UICorner")
-    MinimizeCorner.CornerRadius = UDim.new(0, 3)
-    MinimizeCorner.Parent = MinimizeBtn
-    
     -- Minimize Hover Effect
     MinimizeBtn.MouseEnter:Connect(function()
-        MinimizeBtn.BackgroundColor3 = Color3.fromRGB(60, 140, 220)
+        MinimizeIcon.TextColor3 = Color3.fromRGB(100, 200, 255)
     end)
     MinimizeBtn.MouseLeave:Connect(function()
-        MinimizeBtn.BackgroundColor3 = Color3.fromRGB(50, 120, 200)
+        MinimizeIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
     end)
     
     local isMinimized = false
@@ -498,27 +493,63 @@ function Library:CreateWindow(config)
     MinimizeBtn.MouseButton1Click:Connect(function()
         isMinimized = not isMinimized
         if isMinimized then
-            -- Minimize UI - Only show top bar
-            MainFrame:TweenSize(UDim2.new(0, 720, 0, 50), "Out", "Quad", 0.25, true)
-            MinimizeIcon.Text = "□"
+            -- Minimize UI - Kotak persegi kecil
+            MainFrame:TweenSize(UDim2.new(0, 50, 0, 50), "Out", "Quad", 0.3, true)
+            MainFrame:TweenPosition(UDim2.new(1, -60, 1, -60), "Out", "Quad", 0.3, true)
+            MinimizeIcon.Text = "+"
+            MinimizeIcon.TextSize = 28
+            -- Hide everything
+            TopBar.Visible = false
             Sidebar.Visible = false
             ContentArea.Visible = false
+            Title.Visible = false
+            Version.Visible = false
+            CloseBtn.Visible = false
+            
+            -- Create small minimize icon in center
+            if not MainFrame:FindFirstChild("MinimizedIcon") then
+                local MinimizedIcon = Instance.new("TextLabel")
+                MinimizedIcon.Name = "MinimizedIcon"
+                MinimizedIcon.Size = UDim2.new(1, 0, 1, 0)
+                MinimizedIcon.Position = UDim2.new(0, 0, 0, 0)
+                MinimizedIcon.BackgroundTransparency = 1
+                MinimizedIcon.Text = "+"
+                MinimizedIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
+                MinimizedIcon.TextSize = 28
+                MinimizedIcon.Font = Enum.Font.GothamBold
+                MinimizedIcon.Parent = MainFrame
+            else
+                MainFrame.MinimizedIcon.Visible = true
+            end
         else
-            -- Restore UI - Show full window
-            MainFrame:TweenSize(originalSize, "Out", "Quad", 0.25, true)
-            MinimizeIcon.Text = "—"
-            wait(0.1)
+            -- Restore UI - Tampilkan kembali penuh
+            MainFrame:TweenSize(originalSize, "Out", "Quad", 0.3, true)
+            MainFrame:TweenPosition(originalPosition, "Out", "Quad", 0.3, true)
+            MinimizeIcon.Text = "+"
+            MinimizeIcon.TextSize = 24
+            
+            -- Show everything back
+            wait(0.15)
+            TopBar.Visible = true
+            Title.Visible = true
+            Version.Visible = true
+            CloseBtn.Visible = true
             Sidebar.Visible = true
             ContentArea.Visible = true
+            
+            -- Hide minimized icon
+            if MainFrame:FindFirstChild("MinimizedIcon") then
+                MainFrame.MinimizedIcon.Visible = false
+            end
         end
     end)
     
-    -- Close Button (Modern Square Style)
+    -- Close Button (Transparent, Icon Only)
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Name = "CloseBtn"
-    CloseBtn.Size = UDim2.new(0, 45, 0, 45)
-    CloseBtn.Position = UDim2.new(1, -47, 0, 2.5)
-    CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 60)
+    CloseBtn.Size = UDim2.new(0, 40, 0, 40)
+    CloseBtn.Position = UDim2.new(1, -45, 0, 5)
+    CloseBtn.BackgroundTransparency = 1
     CloseBtn.BorderSizePixel = 0
     CloseBtn.Text = ""
     CloseBtn.AutoButtonColor = false
@@ -531,21 +562,16 @@ function Library:CreateWindow(config)
     CloseIcon.BackgroundTransparency = 1
     CloseIcon.Text = "✕"
     CloseIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CloseIcon.TextSize = 18
+    CloseIcon.TextSize = 24
     CloseIcon.Font = Enum.Font.GothamBold
     CloseIcon.Parent = CloseBtn
     
-    -- Close Corner
-    local CloseCorner = Instance.new("UICorner")
-    CloseCorner.CornerRadius = UDim.new(0, 3)
-    CloseCorner.Parent = CloseBtn
-    
     -- Close Hover Effect
     CloseBtn.MouseEnter:Connect(function()
-        CloseBtn.BackgroundColor3 = Color3.fromRGB(240, 70, 80)
+        CloseIcon.TextColor3 = Color3.fromRGB(255, 100, 100)
     end)
     CloseBtn.MouseLeave:Connect(function()
-        CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 60)
+        CloseIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
     end)
     
     CloseBtn.MouseButton1Click:Connect(function()
