@@ -1,30 +1,12 @@
-# 🌱 MonsHub - Plants vs Brainrots Script v2.0
+# MonsHub - Plants vs Brainrots Script (WindUI Version)
 
-## 🎨 UI Library: Kavo UI
+## 🎨 UI Library: WindUI
 
-Script ini sekarang menggunakan **Kavo UI Library** yang sudah terbukti stabil dan working untuk online execution!
+Script ini sekarang menggunakan **WindUI** dari folder `WindUI-main` untuk tampilan yang lebih modern dan responsif.
 
-## ✨ What's New in v2.0
+## 📋 Struktur Tab & Fitur Lengkap
 
-- **70+ Features** (naik dari 37 features)
-- **9 Complete Tabs** dengan organization yang lebih baik
-- **Enhanced Visuals** dengan ESP system
-- **Teleport System** dengan biome unlocking
-- **Discord Webhook** integration penuh
-- **Performance Optimization** dengan FPS boost
-- **8 Theme Options** untuk kustomisasi UI
-
-## 📋 Complete Tab Structure & Features
-
-### 🏠 TAB 1: HOME
-- **Welcome Section** dengan informasi script
-- **Discord Server Button** (auto copy link)
-- **Check for Updates** button
-- **Theme Selector** - 8 pilihan tema:
-  - DarkTheme, GrapeTheme, BloodTheme, Ocean
-  - Midnight, Sentinel, Synapse, Serpent
-
-### ⚙️ TAB 2: MAIN
+### 🏠 TAB MAIN
 1. **Anti AFK (20 Minutes)**
    - Menjaga akun tidak auto-disconnect saat idle
    - Melakukan gerakan kecil otomatis setiap 60 detik
