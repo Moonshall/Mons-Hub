@@ -1,10 +1,10 @@
 --[[
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    🌱 MonsHub Premium v2.1 - Plants vs Brainrots 🌱
+    🌱 MonsHub - Plants vs Brainrots 🌱
     
     Developer: Moonshall
-    UI Style: NatHub Premium Dark Theme
-    Version: 2.1.0
+    UI Style: Premium Dark Theme
+    Version: 1.0
     Status: Auto-Active Features
     
     Features: 110+ Premium Features
@@ -365,7 +365,7 @@ function Library:CreateWindow(config)
     
     -- Create ScreenGui
     local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "NatHubPremium"
+    ScreenGui.Name = "MonsHubUI"
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     ScreenGui.ResetOnSpawn = false
     ScreenGui.Parent = game.CoreGui
@@ -429,10 +429,10 @@ function Library:CreateWindow(config)
     -- Title
     local Title = Instance.new("TextLabel")
     Title.Name = "Title"
-    Title.Size = UDim2.new(1, -120, 1, 0)
+    Title.Size = UDim2.new(1, -160, 1, 0)
     Title.Position = UDim2.new(0, 60, 0, 0)
     Title.BackgroundTransparency = 1
-    Title.Text = config.Title or "NatHub - Premium"
+    Title.Text = config.Title or "MonsHub | Plants vs Brainrots"
     Title.TextColor3 = Color3.fromRGB(255, 255, 255)
     Title.TextSize = 18
     Title.Font = Enum.Font.GothamBold
@@ -442,14 +442,45 @@ function Library:CreateWindow(config)
     -- Version
     local Version = Instance.new("TextLabel")
     Version.Name = "Version"
-    Version.Size = UDim2.new(0, 100, 1, 0)
-    Version.Position = UDim2.new(1, -110, 0, 0)
+    Version.Size = UDim2.new(0, 60, 1, 0)
+    Version.Position = UDim2.new(1, -160, 0, 0)
     Version.BackgroundTransparency = 1
-    Version.Text = config.Version or "v0.0.2.1"
+    Version.Text = config.Version or "| v1.0"
     Version.TextColor3 = Color3.fromRGB(200, 200, 200)
     Version.TextSize = 14
     Version.Font = Enum.Font.Gotham
     Version.Parent = TopBar
+    
+    -- Minimize Button
+    local MinimizeBtn = Instance.new("TextButton")
+    MinimizeBtn.Name = "MinimizeBtn"
+    MinimizeBtn.Size = UDim2.new(0, 50, 0, 50)
+    MinimizeBtn.Position = UDim2.new(1, -100, 0, 0)
+    MinimizeBtn.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
+    MinimizeBtn.BorderSizePixel = 0
+    MinimizeBtn.Text = "─"
+    MinimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MinimizeBtn.TextSize = 20
+    MinimizeBtn.Font = Enum.Font.GothamBold
+    MinimizeBtn.Parent = TopBar
+    
+    local isMinimized = false
+    local originalSize = MainFrame.Size
+    
+    MinimizeBtn.MouseButton1Click:Connect(function()
+        isMinimized = not isMinimized
+        if isMinimized then
+            MainFrame:TweenSize(UDim2.new(0, 720, 0, 50), "Out", "Quad", 0.3, true)
+            MinimizeBtn.Text = "+"
+            Sidebar.Visible = false
+            ContentArea.Visible = false
+        else
+            MainFrame:TweenSize(originalSize, "Out", "Quad", 0.3, true)
+            MinimizeBtn.Text = "─"
+            Sidebar.Visible = true
+            ContentArea.Visible = true
+        end
+    end)
     
     -- Close Button
     local CloseBtn = Instance.new("TextButton")
@@ -801,8 +832,8 @@ end
 -- ═══════════════════════════════════════════════════════════
 
 local Window = Library:CreateWindow({
-    Title = "NatHub - Premium",
-    Version = "v0.0.2.1"
+    Title = "MonsHub | Plants vs Brainrots",
+    Version = "| v1.0"
 })
 
 -- ═══════════════════════════════════════════════════════════
@@ -1041,18 +1072,20 @@ WebhookTab:AddLabel("Setup your Discord webhook for notifications")
 -- ═══════════════════════════════════════════════════════════
 
 wait(1)
-SendNotification("🌱 MonsHub Premium Loaded!", "110+ Features Ready | Anti AFK: ACTIVE ✓", 8)
+SendNotification("🌱 MonsHub Loaded!", "Plants vs Brainrots | Anti AFK: ACTIVE ✓", 8)
 wait(2)
 SendNotification("⚡ Auto-Active Features", "Anti AFK is protecting you from kicks!", 5)
 
 print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-print("🌱 MonsHub Premium v2.1 - Loaded Successfully!")
+print("🌱 MonsHub v1.0 - Loaded Successfully!")
+print("   Plants vs Brainrots Script")
 print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-print("✓ UI Style: NatHub Premium Dark")
+print("✓ UI Style: Premium Dark Theme")
 print("✓ Theme: Orange/Pink/Purple Gradient")
 print("✓ Anti AFK: AUTO ACTIVE (4 Methods)")
 print("✓ Auto Buy Seed: Ready")
 print("✓ Auto Sell Seed: Ready")
+print("✓ Minimize Button: Added")
 print("✓ Total Features: 110+")
 print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 print("🎮 Enjoy farming! 🌱")
