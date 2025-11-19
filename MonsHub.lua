@@ -382,6 +382,7 @@ function Library:CreateWindow(config)
     MainFrame.Position = UDim2.new(0.5, -360, 0.5, -215)
     MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
     MainFrame.BorderSizePixel = 0
+    MainFrame.ClipsDescendants = true
     MainFrame.Parent = ScreenGui
     
     -- Make Draggable
@@ -419,6 +420,7 @@ function Library:CreateWindow(config)
     TopBar.Size = UDim2.new(1, 0, 0, 50)
     TopBar.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
     TopBar.BorderSizePixel = 0
+    TopBar.ClipsDescendants = true
     TopBar.Parent = MainFrame
     
     -- Gradient TopBar
@@ -493,53 +495,59 @@ function Library:CreateWindow(config)
     MinimizeBtn.MouseButton1Click:Connect(function()
         isMinimized = not isMinimized
         if isMinimized then
-            -- Minimize UI - Kotak persegi kecil
-            MainFrame:TweenSize(UDim2.new(0, 50, 0, 50), "Out", "Quad", 0.3, true)
-            MainFrame:TweenPosition(UDim2.new(1, -60, 1, -60), "Out", "Quad", 0.3, true)
-            MinimizeIcon.Text = "+"
-            MinimizeIcon.TextSize = 28
-            -- Hide everything
-            TopBar.Visible = false
-            Sidebar.Visible = false
-            ContentArea.Visible = false
+            -- Hide everything FIRST before animation
+            MinimizeBtn.Visible = false
             Title.Visible = false
             Version.Visible = false
             CloseBtn.Visible = false
+            Sidebar.Visible = false
+            ContentArea.Visible = false
             
-            -- Create small minimize icon in center
-            if not MainFrame:FindFirstChild("MinimizedIcon") then
-                local MinimizedIcon = Instance.new("TextLabel")
-                MinimizedIcon.Name = "MinimizedIcon"
-                MinimizedIcon.Size = UDim2.new(1, 0, 1, 0)
-                MinimizedIcon.Position = UDim2.new(0, 0, 0, 0)
-                MinimizedIcon.BackgroundTransparency = 1
-                MinimizedIcon.Text = "+"
-                MinimizedIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
-                MinimizedIcon.TextSize = 28
-                MinimizedIcon.Font = Enum.Font.GothamBold
-                MinimizedIcon.Parent = MainFrame
+            -- Then minimize UI to small box
+            MainFrame:TweenSize(UDim2.new(0, 50, 0, 50), "Out", "Quad", 0.3, true)
+            MainFrame:TweenPosition(UDim2.new(1, -60, 1, -60), "Out", "Quad", 0.3, true)
+            
+            -- Create or show minimized button
+            if not MainFrame:FindFirstChild("MinimizedButton") then
+                local MinimizedButton = Instance.new("TextButton")
+                MinimizedButton.Name = "MinimizedButton"
+                MinimizedButton.Size = UDim2.new(1, 0, 1, 0)
+                MinimizedButton.Position = UDim2.new(0, 0, 0, 0)
+                MinimizedButton.BackgroundTransparency = 1
+                MinimizedButton.Text = "+"
+                MinimizedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+                MinimizedButton.TextSize = 30
+                MinimizedButton.Font = Enum.Font.GothamBold
+                MinimizedButton.Parent = MainFrame
+                
+                -- Click to expand
+                MinimizedButton.MouseButton1Click:Connect(function()
+                    isMinimized = false
+                    MinimizedButton.Visible = false
+                    
+                    -- Restore UI
+                    MainFrame:TweenSize(originalSize, "Out", "Quad", 0.3, true)
+                    MainFrame:TweenPosition(originalPosition, "Out", "Quad", 0.3, true)
+                    
+                    -- Show everything after animation
+                    wait(0.2)
+                    MinimizeBtn.Visible = true
+                    Title.Visible = true
+                    Version.Visible = true
+                    CloseBtn.Visible = true
+                    Sidebar.Visible = true
+                    ContentArea.Visible = true
+                end)
+                
+                -- Hover effect
+                MinimizedButton.MouseEnter:Connect(function()
+                    MinimizedButton.TextColor3 = Color3.fromRGB(100, 200, 255)
+                end)
+                MinimizedButton.MouseLeave:Connect(function()
+                    MinimizedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+                end)
             else
-                MainFrame.MinimizedIcon.Visible = true
-            end
-        else
-            -- Restore UI - Tampilkan kembali penuh
-            MainFrame:TweenSize(originalSize, "Out", "Quad", 0.3, true)
-            MainFrame:TweenPosition(originalPosition, "Out", "Quad", 0.3, true)
-            MinimizeIcon.Text = "+"
-            MinimizeIcon.TextSize = 24
-            
-            -- Show everything back
-            wait(0.15)
-            TopBar.Visible = true
-            Title.Visible = true
-            Version.Visible = true
-            CloseBtn.Visible = true
-            Sidebar.Visible = true
-            ContentArea.Visible = true
-            
-            -- Hide minimized icon
-            if MainFrame:FindFirstChild("MinimizedIcon") then
-                MainFrame.MinimizedIcon.Visible = false
+                MainFrame.MinimizedButton.Visible = true
             end
         end
     end)
