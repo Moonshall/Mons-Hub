@@ -363,6 +363,11 @@ local Library = {}
 function Library:CreateWindow(config)
     local Window = {}
     
+    -- Check if UI already exists and destroy it
+    if game.CoreGui:FindFirstChild("MonsHubUI") then
+        game.CoreGui.MonsHubUI:Destroy()
+    end
+    
     -- Create ScreenGui
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "MonsHubUI"
@@ -442,8 +447,8 @@ function Library:CreateWindow(config)
     -- Version
     local Version = Instance.new("TextLabel")
     Version.Name = "Version"
-    Version.Size = UDim2.new(0, 60, 1, 0)
-    Version.Position = UDim2.new(1, -160, 0, 0)
+    Version.Size = UDim2.new(0, 70, 1, 0)
+    Version.Position = UDim2.new(1, -170, 0, 0)
     Version.BackgroundTransparency = 1
     Version.Text = config.Version or "| v1.0"
     Version.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -451,51 +456,102 @@ function Library:CreateWindow(config)
     Version.Font = Enum.Font.Gotham
     Version.Parent = TopBar
     
-    -- Minimize Button
+    -- Minimize Button (Modern Square Style)
     local MinimizeBtn = Instance.new("TextButton")
     MinimizeBtn.Name = "MinimizeBtn"
-    MinimizeBtn.Size = UDim2.new(0, 50, 0, 50)
-    MinimizeBtn.Position = UDim2.new(1, -100, 0, 0)
-    MinimizeBtn.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
+    MinimizeBtn.Size = UDim2.new(0, 45, 0, 45)
+    MinimizeBtn.Position = UDim2.new(1, -97, 0, 2.5)
+    MinimizeBtn.BackgroundColor3 = Color3.fromRGB(50, 120, 200)
     MinimizeBtn.BorderSizePixel = 0
-    MinimizeBtn.Text = "─"
-    MinimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    MinimizeBtn.TextSize = 20
-    MinimizeBtn.Font = Enum.Font.GothamBold
+    MinimizeBtn.Text = ""
+    MinimizeBtn.AutoButtonColor = false
     MinimizeBtn.Parent = TopBar
+    
+    -- Minimize Icon (-)
+    local MinimizeIcon = Instance.new("TextLabel")
+    MinimizeIcon.Name = "MinimizeIcon"
+    MinimizeIcon.Size = UDim2.new(1, 0, 1, 0)
+    MinimizeIcon.BackgroundTransparency = 1
+    MinimizeIcon.Text = "—"
+    MinimizeIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MinimizeIcon.TextSize = 18
+    MinimizeIcon.Font = Enum.Font.GothamBold
+    MinimizeIcon.Parent = MinimizeBtn
+    
+    -- Minimize Corner
+    local MinimizeCorner = Instance.new("UICorner")
+    MinimizeCorner.CornerRadius = UDim.new(0, 3)
+    MinimizeCorner.Parent = MinimizeBtn
+    
+    -- Minimize Hover Effect
+    MinimizeBtn.MouseEnter:Connect(function()
+        MinimizeBtn.BackgroundColor3 = Color3.fromRGB(60, 140, 220)
+    end)
+    MinimizeBtn.MouseLeave:Connect(function()
+        MinimizeBtn.BackgroundColor3 = Color3.fromRGB(50, 120, 200)
+    end)
     
     local isMinimized = false
     local originalSize = MainFrame.Size
+    local originalPosition = MainFrame.Position
     
     MinimizeBtn.MouseButton1Click:Connect(function()
         isMinimized = not isMinimized
         if isMinimized then
-            MainFrame:TweenSize(UDim2.new(0, 720, 0, 50), "Out", "Quad", 0.3, true)
-            MinimizeBtn.Text = "+"
+            -- Minimize UI - Only show top bar
+            MainFrame:TweenSize(UDim2.new(0, 720, 0, 50), "Out", "Quad", 0.25, true)
+            MinimizeIcon.Text = "□"
             Sidebar.Visible = false
             ContentArea.Visible = false
         else
-            MainFrame:TweenSize(originalSize, "Out", "Quad", 0.3, true)
-            MinimizeBtn.Text = "─"
+            -- Restore UI - Show full window
+            MainFrame:TweenSize(originalSize, "Out", "Quad", 0.25, true)
+            MinimizeIcon.Text = "—"
+            wait(0.1)
             Sidebar.Visible = true
             ContentArea.Visible = true
         end
     end)
     
-    -- Close Button
+    -- Close Button (Modern Square Style)
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Name = "CloseBtn"
-    CloseBtn.Size = UDim2.new(0, 50, 0, 50)
-    CloseBtn.Position = UDim2.new(1, -50, 0, 0)
-    CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+    CloseBtn.Size = UDim2.new(0, 45, 0, 45)
+    CloseBtn.Position = UDim2.new(1, -47, 0, 2.5)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 60)
     CloseBtn.BorderSizePixel = 0
-    CloseBtn.Text = "X"
-    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CloseBtn.TextSize = 20
-    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.Text = ""
+    CloseBtn.AutoButtonColor = false
     CloseBtn.Parent = TopBar
     
+    -- Close Icon (X)
+    local CloseIcon = Instance.new("TextLabel")
+    CloseIcon.Name = "CloseIcon"
+    CloseIcon.Size = UDim2.new(1, 0, 1, 0)
+    CloseIcon.BackgroundTransparency = 1
+    CloseIcon.Text = "✕"
+    CloseIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseIcon.TextSize = 18
+    CloseIcon.Font = Enum.Font.GothamBold
+    CloseIcon.Parent = CloseBtn
+    
+    -- Close Corner
+    local CloseCorner = Instance.new("UICorner")
+    CloseCorner.CornerRadius = UDim.new(0, 3)
+    CloseCorner.Parent = CloseBtn
+    
+    -- Close Hover Effect
+    CloseBtn.MouseEnter:Connect(function()
+        CloseBtn.BackgroundColor3 = Color3.fromRGB(240, 70, 80)
+    end)
+    CloseBtn.MouseLeave:Connect(function()
+        CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 60)
+    end)
+    
     CloseBtn.MouseButton1Click:Connect(function()
+        -- Smooth close animation
+        MainFrame:TweenSize(UDim2.new(0, 0, 0, 0), "In", "Back", 0.3, true)
+        wait(0.3)
         ScreenGui:Destroy()
     end)
     
