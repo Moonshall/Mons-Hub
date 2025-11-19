@@ -3,20 +3,13 @@
     Game: Plants vs Brainrots by Yo Gurt Studios  
     Created: 2025
     Features: Auto Farm Brainrot, Auto Move Plant, Auto Gear, Event Support, and more
-    UI: Orion Library (Online Compatible)
+    UI: Kavo UI Library
 ]]--
 
--- Load Orion Library
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+-- Load Kavo UI Library  
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 
-local Window = OrionLib:MakeWindow({
-    Name = "🌱 MonsHub | Plants vs Brainrots",
-    HidePremium = false,
-    SaveConfig = true,
-    ConfigFolder = "MonsHubPvBR",
-    IntroEnabled = true,
-    IntroText = "MonsHub Loading..."
-})
+local Window = Library.CreateLib("🌱 MonsHub | Plants vs Brainrots", "DarkTheme")
 
 -- Variables
 local Player = game.Players.LocalPlayer
@@ -459,52 +452,32 @@ end)
 -- ═════════════════════════════════════════
 
 -- TAB MAIN
-local MainTab = Window:MakeTab({
-    Name = "Main",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
+local MainTab = Window:NewTab("Main")
+local MainSection = MainTab:NewSection("Main Features")
 
-MainTab:AddLabel("🌱 MonsHub - Plants vs Brainrots")
+MainSection:NewLabel("🌱 MonsHub - Plants vs Brainrots")
 
-MainTab:AddToggle({
-    Name = "Anti AFK (20 Minutes)",
-    Default = false,
-    Callback = function(Value)
-        Settings.AntiAFK = Value
-        OrionLib:MakeNotification({
-            Name = "Anti AFK",
-            Content = "Anti AFK: " .. (Value and "ON" or "OFF"),
-            Image = "rbxassetid://4483345998",
-            Time = 3
-        })
-    end
-})
-
-MainTab:AddLabel("Menjaga akun tidak auto-disconnect saat idle")
+MainSection:NewToggle("Anti AFK (20 Minutes)", "Menjaga akun tidak auto-disconnect", function(state)
+    Settings.AntiAFK = state
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Anti AFK",
+        Text = "Anti AFK: " .. (state and "ON" or "OFF"),
+        Duration = 3
+    })
+end)
 
 -- TAB FARM
-local FarmTab = Window:MakeTab({
-    Name = "Farm",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
+local FarmTab = Window:NewTab("Farm")
+local BrainrotSection = FarmTab:NewSection("🔥 Brainrot Section")
 
-FarmTab:AddSection({Name = "🔥 Brainrot Section"})
-
-FarmTab:AddToggle({
-    Name = "Auto Farm Brainrot",
-    Default = false,
-    Callback = function(Value)
-        Settings.AutoFarmBrainrot = Value
-        OrionLib:MakeNotification({
-            Name = "Auto Farm Brainrot",
-            Content = "Auto Farm: " .. (Value and "ON" or "OFF"),
-            Image = "rbxassetid://4483345998",
-            Time = 3
-        })
-    end
-})
+BrainrotSection:NewToggle("Auto Farm Brainrot", "Otomatis farming Brainrot", function(state)
+    Settings.AutoFarmBrainrot = state
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Auto Farm",
+        Text = "Auto Farm: " .. (state and "ON" or "OFF"),
+        Duration = 3
+    })
+end)
 
 FarmTab:AddSlider({
     Name = "Auto Equip Best Delay",
@@ -617,11 +590,7 @@ FarmTab:AddToggle({
 })
 
 -- TAB EVENT
-local EventTab = Window:MakeTab({
-    Name = "Event",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
+local EventTab = Window:CreateTab("Event", 4483345998)
 
 EventTab:AddSection({Name = "📇 Card Event"})
 
@@ -667,11 +636,7 @@ EventTab:AddToggle({
 })
 
 -- TAB SHOP
-local ShopTab = Window:MakeTab({
-    Name = "Shop",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
+local ShopTab = Window:CreateTab("Shop", 4483345998)
 
 ShopTab:AddSection({Name = "🛒 Shop Features"})
 
@@ -760,11 +725,7 @@ ShopTab:AddToggle({
 })
 
 -- TAB WEBHOOK
-local WebhookTab = Window:MakeTab({
-    Name = "Webhook",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
+local WebhookTab = Window:CreateTab("Webhook", 4483345998)
 
 WebhookTab:AddSection({Name = "📨 Discord Webhook"})
 
@@ -833,11 +794,7 @@ WebhookTab:AddButton({
 WebhookTab:AddLabel("Kirim notifikasi ke Discord untuk drop bagus & rare Brainrot")
 
 -- TAB PLAYER
-local PlayerTab = Window:MakeTab({
-    Name = "Player",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
+local PlayerTab = Window:CreateTab("Player", 4483345998)
 
 PlayerTab:AddSection({Name = "👤 Player Settings"})
 
@@ -934,11 +891,7 @@ PlayerTab:AddToggle({
 })
 
 -- TAB MISC
-local MiscTab = Window:MakeTab({
-    Name = "Misc",
-    Icon = "rbxassetid://4483345998",
-    PremiumOnly = false
-})
+local MiscTab = Window:CreateTab("Misc", 4483345998)
 
 MiscTab:AddSection({Name = "⚙️ Miscellaneous"})
 
@@ -999,18 +952,18 @@ MiscTab:AddLabel("Script Version: 1.0.0")
 MiscTab:AddLabel("UI: Orion Library")
 
 -- Initialize
-OrionLib:MakeNotification({
-    Name = "🌱 MonsHub Loaded!",
+Rayfield:Notify({
+    Title = "🌱 MonsHub Loaded!",
     Content = "Plants vs Brainrots script ready! Enjoy!",
-    Image = "rbxassetid://4483345998",
-    Time = 5
+    Duration = 5,
+    Image = 4483345998
 })
 
 print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 print("MonsHub - Plants vs Brainrots")
 print("Script Version: 1.0.0")
 print("Game by: Yo Gurt Studios")
-print("UI: Orion Library (Online Compatible)")
+print("UI: Rayfield Library")
 print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 print("Features Loaded:")
 print("✓ Anti AFK (20 minutes)")
@@ -1023,5 +976,3 @@ print("✓ Auto Shop (Spin, Crate, Merge)")
 print("✓ Discord Webhook")
 print("✓ Player Settings & ESP")
 print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-
-OrionLib:Init()
